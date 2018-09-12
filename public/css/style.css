@@ -1,0 +1,79 @@
+body {
+    background-color: lightcyan;
+}
+
+#topHome {
+    width: 100%;
+    height: 75px;
+    background-color: lightcoral;
+    float: left;
+    margin-bottom: 40px;
+}
+.pageName {
+    float: left;
+    font-size: 48px;
+    margin-left: 20px;
+    font-family: 'Cardo', serif;
+}
+
+.pages {
+    margin-top: 20px;
+    float: left;
+    margin-left: 20px;
+    font-family: 'Cardo', serif;
+}
+
+.pages li{
+    display: inline;
+    margin-left: 10px;
+    font-size: 24px;
+}
+
+a {
+    color: white;
+}
+
+a:active {
+   color: white;
+}
+
+.buttons{
+    float: left;
+    margin-top: 20px;
+    margin-left: 30px;
+}
+
+#mainHeader {
+    margin-top: 20px;
+    margin-bottom: 32px;
+    text-align: center;
+    font-family: 'Cardo', serif;
+    font-size: 56px;
+}
+
+.articleArea {
+    padding-bottom: 20px;
+    
+}
+
+.saveArticle {
+    float: right;
+    margin-top: -20px;
+    margin-right: 15px;
+}
+
+.articleSpace {
+    background-color: white;
+}
+    
+.deleteButton {
+    float: right;
+    margin-top: -15px;
+    margin-right: 7px;
+}
+
+.commentButton {
+    float: right;
+    margin-top: -15px;
+    margin-right: 15px
+}
