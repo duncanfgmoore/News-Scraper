@@ -63,17 +63,36 @@ a:active {
 }
 
 .articleSpace {
-    background-color: white;
-}
-    
-.deleteButton {
-    float: right;
-    margin-top: -15px;
-    margin-right: 7px;
+        background-color: white;    
+        width:60%;
+        float: left;
+        margin-bottom: 20px;
 }
 
-.commentButton {
-    float: right;
-    margin-top: -15px;
-    margin-right: 15px
+.unsaved {
+    background-color: white;    
+    width:100%;
+    float: left;
+    margin-bottom: 20px;
 }
+    
+#noteArea {
+    width: 30%;
+    float: right;
+    margin-top: 100px;
+    margin-right: 40px;
+}
+
+textarea, input {
+    display: block;
+    width: 100%;
+   
+  }
+  input {
+    height: 36px;
+    font-size: 24px;
+  }
+  textarea {
+    height: 200px;
+    font-size: 18px;
+  }
