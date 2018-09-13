@@ -7,7 +7,7 @@ $.getJSON("/articles", function(data) {
       $("#articles").append("<div class='articleSpace'><p class='showArticles' data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + " <button class='saveArticle btn btn-warning' data-id='" + data[i]._id + "'> Save Article </button></p></div>");
      } 
      if (data[i].saved === true) {
-      $("#savedArticles").append("<div class='articleSpace'><p class='showArticles' data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + " <button class='commentButton btn btn-info'> Leave Comment </button> <button class='deleteButton btn btn-danger' data-id='" + data[i]._id + "'>Delete Article</button></p></div>");
+      $("#savedArticles").append("<div class='articleSpace'><p class='showArticles' data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + " <button class='commentButton btn btn-info' data-id='" + data[i]._id + "' data-target='#myModal' data-toggle='modal'> Leave Comment </button> <button class='deleteButton btn btn-danger' data-id='" + data[i]._id + "'>Delete Article</button></p></div>");
     }
      
   }
@@ -22,52 +22,44 @@ $("#scrapeButton").on("click", function(){
 });
 
 //Onclick function that clears out all the articles on the page
-$("#clearButton").on("click", function() {
+$(".clearButton").on("click", function() {
   $("#articles").empty();
-  alert("pressed clear")
-});
-
-
-
-//This part will be for leaving comments on the articles
-
-$(document).on("click", ".p", function() {
-  // Empty the notes from the note section
-
-  console.log("hello")
-  $("#notes").empty();
-  // Save the id from the p tag
-  var thisId = $(this).attr("data-id");
-
-  // Now make an ajax call for the Article
-  $.ajax({
-    method: "GET",
-    url: "/articles/" + thisId
-  })
-    // With that done, add the note information to the page
-    .then(function(data) {
-      console.log(data);
-      // The title of the article
-      $("#notes").append("<h2>" + data.title + "</h2>");
-      // An input to enter a new title
-      $("#notes").append("<input id='titleinput' name='title' >");
-      // A textarea to add a new note body
-      $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
-      // A button to submit a new note, with the id of the article saved to it
-      $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
-
-      // If there's a note in the article
-      if (data.note) {
-        // Place the title of the note in the title input
-        $("#titleinput").val(data.note.title);
-        // Place the body of the note in the body textarea
-        $("#bodyinput").val(data.note.body);
-      }
-    });
+  
 });
 
 
 $(document).ready(function() {
+//This part will be for leaving comments on the articles
+
+$(".commentButton").on("click", function() {
+  // Get article by article ID
+  $("#myModal").modal("toggle");
+  var articleID = $(this).attr("data-id");
+  console.log(articleID);
+ // Now make an ajax call for the Article
+  $.ajax({
+    method: "GET",
+    url: "/notes/" + articleID
+  }).done(function(data) {
+    // Update modal header
+    console.log(data);
+    $("#comments-header").html("Article Comments (ID: " + data._id + ")");
+    // If the article has comments
+    if (data.note.length !== 0) {
+      // Clear out the comment div
+      $("#comments-list").empty();
+      for (i = 0; i < data.note.length; i++) {
+        // Append all article comments
+        $("#comments-list").append("<div class='comment-div'><p class='comment'>" + data.comments[i].body + "</p></div>");
+      }
+    }
+    // Append save comment button with article's ID saved as data-id attribute
+    $("footer.modal-card-foot").html("<button id='save-comment' class='button is-success' data-id='" + data._id + "'>Save Comment</button>")
+  });
+});
+
+
+
   
 //Onclick function to update the article to saved
 $(".saveArticle").on("click", function() {
@@ -108,7 +100,5 @@ $(".deleteButton").on("click", function() {
     location.reload();
   
 });
-
-
 
 });
