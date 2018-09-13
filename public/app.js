@@ -33,9 +33,9 @@ $(document).ready(function() {
 
 $(".commentButton").on("click", function() {
   // Get article by article ID
-  $("#myModal").modal("toggle");
+ 
   var articleID = $(this).attr("data-id");
-  console.log(articleID);
+  alert(articleID);
  // Now make an ajax call for the Article
   $.ajax({
     method: "GET",
@@ -43,15 +43,16 @@ $(".commentButton").on("click", function() {
   }).done(function(data) {
     // Update modal header
     console.log(data);
-    $("#comments-header").html("Article Comments (ID: " + data._id + ")");
+    $(".header").html("Comments (ID: " + data._id + ")");
     // If the article has comments
     if (data.note.length !== 0) {
       // Clear out the comment div
       $("#comments-list").empty();
       for (i = 0; i < data.note.length; i++) {
         // Append all article comments
-        $("#comments-list").append("<div class='comment-div'><p class='comment'>" + data.comments[i].body + "</p></div>");
+        $(".articleNotes").html("<div class='comment-div'><p class='comment'>" + data.note[i].body + "</p></div>");
       }
+      
     }
     // Append save comment button with article's ID saved as data-id attribute
     $("footer.modal-card-foot").html("<button id='save-comment' class='button is-success' data-id='" + data._id + "'>Save Comment</button>")
@@ -59,6 +60,29 @@ $(".commentButton").on("click", function() {
 });
 
 
+//Onclick function to make the submit button work
+$(".submitNote").on("click", function() {
+  alert("hello");
+  // Grab the id associated with the article from the submit button
+  var articleID = $(this).attr("data-id");
+  // Run a POST request to add a comment, using what's entered in the inputs
+  $.ajax({
+    method: "POST",
+    url: "/comment/" + articleID,
+    data: {
+      // Value taken from body input
+      body: $("#notes").val()
+    }
+  }).done(function(data) {
+    // Log the response
+    console.log("data: ", data);
+  });
+
+  // Also, remove the values entered in the inputs for comment entry
+  $("#notes").val("");
+  // Close comment modal
+  
+});
 
   
 //Onclick function to update the article to saved
