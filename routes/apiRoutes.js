@@ -3,7 +3,7 @@ let axios = require('axios'); // HTTP Request
 let cheerio = require('cheerio'); // Web Scrapper
 let mongoose = require('mongoose'); // MongoDB ORM
 
-mongoose.connect("mongodb://localhost/scrapingMongos");
+mongoose.connect("mongodb://localhost/News-Scraper");
 
 
 module.exports = function (app) {
@@ -19,39 +19,48 @@ module.exports = function (app) {
   });
 
   // A GET route for scraping the echoJS website
-app.get("/scrape", function(req, res) {
+    app.get("/scrape", function(req, res) {
     // First, we grab the body of the html with request
-    axios.get("http://www.echojs.com/").then(function(response) {
+    axios.get("https://www.peacearchnews.com/sports/").then (function(response) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       var $ = cheerio.load(response.data);
-  
+
+      //console.log(response);
+
       // Now, we grab every h2 within an article tag, and do the following:
-      $("article h2").each(function(i, element) {
+      $(".small-12").each(function(i, element) {
         // Save an empty result object
         var result = {};
-  
-        // Add the text and href of every link, and save them as properties of the result object
+
+        //Add the text and href of every link, and save them as properties of the result object
         result.title = $(this)
+          .children("h4")  
           .children("a")
-          .text();
+          .text()
+          .trim();
         result.link = $(this)
+          .children("h4")  
           .children("a")
           .attr("href");
-  
-        // Create a new Article using the `result` object built from scraping
+
+        result.summary = $(this)
+          .children("p")
+          .text()
+          .trim();
+
+        console.log(result);
+
+        //Create a new Article using the `result` object built from scraping
         db.Article.create(result)
           .then(function(dbArticle) {
-            // View the added result in the console
-            console.log(dbArticle);
+            // If we were able to successfully scrape and save an Article, send a message to the client
+            res.send(dbArticle);
           })
           .catch(function(err) {
             // If an error occurred, send it to the client
-            return res.json(err);
+            res.json(err);
           });
       });
-  
-      // If we were able to successfully scrape and save an Article, send a message to the client
-      res.send("Scrape Complete");
     });
   });
   

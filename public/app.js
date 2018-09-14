@@ -4,10 +4,10 @@ $.getJSON("/articles", function(data) {
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
     if(data[i].saved === false) {
-      $("#articles").append("<div class='unsaved'><p class='showArticles' data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + " <button class='saveArticle btn btn-warning' data-id='" + data[i]._id + "'> Save Article </button></p></div>");
+      $("#articles").append("<div class='unsaved'><p class='showArticles' data-id='" + data[i]._id + "'>" + "<h3>" + data[i].title +"</h3>" + "<br/>" + data[i].summary + "<br/>" + data[i].link +  "<br/> <button class='saveArticle btn btn-warning' data-id='" + data[i]._id + "'> Save Article </button></p></div>");
      } 
      if (data[i].saved === true) {
-      $("#savedArticles").append("<div class='articleSpace'><p class='showArticles' data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + " </br><button class='commentButton btn btn-info' data-id='" + data[i]._id + "' data-target='#myModal' data-toggle='modal'> Leave Comment </button> <button class='deleteButton btn btn-danger' data-id='" + data[i]._id + "'>Delete Article</button></p></div>");
+      $("#savedArticles").append("<div class='articleSpace'><p class='showArticles' data-id='" + data[i]._id + "'>" + "<h3>" + data[i].title +"</h3>" + "<br>" + data[i].summary + "<br>" + data[i].link + " </br><button class='commentButton btn btn-info' data-id='" + data[i]._id + "' data-target='#myModal' data-toggle='modal'> Leave Comment </button> <button class='deleteButton btn btn-danger' data-id='" + data[i]._id + "'>Delete Article</button></p></div>");
     }
      
   }
@@ -17,7 +17,7 @@ $.getJSON("/articles", function(data) {
 $("#scrapeButton").on("click", function(){
   $.getJSON("/articles", function(data) { 
     for (var i = 0; i < data.length; i++) {
-      $("#articles").append("<div class='articleSpace'><p class='showArticles' data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + " <button class='saveArticle btn btn-warning'> Save Article </button></p></div>"); }
+      $("#articles").append("<div class='articleSpace'><p class='showArticles' data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + "<a href=" + data[i].link + ">" + data[i].link + "</a>" + "<button class='saveArticle btn btn-warning'> Save Article </button></p></div>"); }
     });
 });
 
@@ -33,7 +33,7 @@ $(document).ready(function() {
 
 $(".commentButton").on("click", function() {
   // Empty the notes from the note section
-  alert("hello");
+ 
   $("#notes").empty();
   // Save the id from the p tag
   var thisId = $(this).attr("data-id");
@@ -86,7 +86,7 @@ $(document).on("click", "#saveNote", function() {
     // With that done
     .then(function(data) {
       // Log the response
-      console.log(data);
+      //console.log(data);
       // Empty the notes section
       $("#noteArea").empty();
     });
@@ -109,7 +109,7 @@ $(".saveArticle").on("click", function() {
     }
   })
     .then(function(data) { 
-      console.log(data);
+      //console.log(data);
     });
   
     location.reload();
@@ -120,7 +120,7 @@ $(".saveArticle").on("click", function() {
 $(".deleteButton").on("click", function() {
   var thisDelete = $(this).attr("data-id");
  
-  console.log(thisDelete);
+  //console.log(thisDelete);
   $.ajax({
     method: "PUT",
     url: "/deleted/" + thisDelete,
@@ -129,7 +129,7 @@ $(".deleteButton").on("click", function() {
     }
   })
     .then(function(data) { 
-      console.log(data);
+      //console.log(data);
     });
   
     location.reload();
